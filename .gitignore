@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Generated reports (rebuilt on every run). Final outputs go in sample_outputs/ in Week 4.
+reports/*
+!reports/.gitkeep
