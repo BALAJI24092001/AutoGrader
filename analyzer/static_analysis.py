@@ -28,17 +28,30 @@ def run_cppcheck(source_path):
     """Return cppcheck findings as a list of {"line", "severity", "id", "message"}."""
     template = "{line}:{severity}:{id}:{message}"
     result = subprocess.run(
-        ["cppcheck", f"--enable={CPPCHECK_CHECKS}", "--quiet",
-         f"--template={template}", source_path],
-        capture_output=True, text=True, timeout=CPPCHECK_TIMEOUT_S,
+        [
+            "cppcheck",
+            f"--enable={CPPCHECK_CHECKS}",
+            "--quiet",
+            f"--template={template}",
+            source_path,
+        ],
+        capture_output=True,
+        text=True,
+        timeout=CPPCHECK_TIMEOUT_S,
     )
     findings = []
     # cppcheck prints its findings on stderr, one per line, in our template.
     for line in result.stderr.splitlines():
         parts = line.split(":", 3)
         if len(parts) == 4 and parts[0].isdigit():
-            findings.append({"line": int(parts[0]), "severity": parts[1],
-                             "id": parts[2], "message": parts[3]})
+            findings.append(
+                {
+                    "line": int(parts[0]),
+                    "severity": parts[1],
+                    "id": parts[2],
+                    "message": parts[3],
+                }
+            )
     return sorted(findings, key=lambda f: f["line"])
 
 
@@ -50,13 +63,23 @@ def analyze(source_path, first_pass, params, rules):
     functions = []
     problems = []
     for func in lizard.analyze_file(source_path).function_list:
-        functions.append({"name": func.name, "line": func.start_line,
-                          "cyclomatic": func.cyclomatic_complexity, "length": func.nloc})
+        functions.append(
+            {
+                "name": func.name,
+                "line": func.start_line,
+                "cyclomatic": func.cyclomatic_complexity,
+                "length": func.nloc,
+            }
+        )
         if func.cyclomatic_complexity > max_cyclomatic:
-            problems.append(f"{func.name}() has cyclomatic complexity "
-                            f"{func.cyclomatic_complexity} (limit {max_cyclomatic})")
+            problems.append(
+                f"{func.name}() has cyclomatic complexity "
+                f"{func.cyclomatic_complexity} (limit {max_cyclomatic})"
+            )
         if func.nloc > max_length:
-            problems.append(f"{func.name}() is {func.nloc} lines long (limit {max_length})")
+            problems.append(
+                f"{func.name}() is {func.nloc} lines long (limit {max_length})"
+            )
 
     findings = run_cppcheck(source_path)
     for f in findings:
@@ -66,10 +89,16 @@ def analyze(source_path, first_pass, params, rules):
     if problems:
         feedback = f"{len(problems)} problem(s); first: {problems[0]}"
     else:
-        feedback = (f"all functions within limits (cyclomatic <= {max_cyclomatic}, "
-                    f"length <= {max_length}); cppcheck found nothing")
+        feedback = (
+            f"all functions within limits (cyclomatic <= {max_cyclomatic}, "
+            f"length <= {max_length}); cppcheck found nothing"
+        )
     return {
         "score": score,
-        "evidence": {"functions": functions, "cppcheck": findings, "problems": problems},
+        "evidence": {
+            "functions": functions,
+            "cppcheck": findings,
+            "problems": problems,
+        },
         "feedback": feedback,
     }
