@@ -1,0 +1,8 @@
+# Report-card colours for the dashboard. A fixed light theme keeps every text readable.
+[theme]
+base = "light"
+primaryColor = "#1E4D3B"
+backgroundColor = "#FAFAFA"
+secondaryBackgroundColor = "#E8F2ED"
+textColor = "#2D3748"
+font = "serif"
