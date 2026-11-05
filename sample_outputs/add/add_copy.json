@@ -1,0 +1,207 @@
+{
+  "submission": "submissions/add/add_copy.c",
+  "grade": 97.0,
+  "rules_sha256": "b993f21f617bb6825b4523d28fd8f9f4c7c583d108c0b6a9484c701f83810654",
+  "tool_versions": {
+    "python": "3.14.4",
+    "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "cppcheck": "Cppcheck 2.19.0",
+    "lizard": "1.24.2"
+  },
+  "first_pass": {
+    "source": "submissions/add/add_copy.c",
+    "checks": {
+      "has_main": true,
+      "uses_scanf": true,
+      "uses_printf": true,
+      "has_return": true
+    },
+    "compiled": true,
+    "compiler_output": "",
+    "binary": "build/add/add_copy",
+    "smoke": {
+      "status": "ok",
+      "returncode": 0,
+      "signal": null,
+      "stdout": "12\n",
+      "stderr": "",
+      "time_s": 0.004
+    },
+    "suspected_infinite_loop": false,
+    "can_run": true
+  },
+  "run_problems": [],
+  "metrics": {
+    "correctness": {
+      "score": 1.0,
+      "evidence": {
+        "passed": 10,
+        "total": 10,
+        "failures": []
+      },
+      "feedback": "10 of 10 tests pass",
+      "weight": 0.2,
+      "advice": "Run your program on the failing inputs above, including very large and very small numbers."
+    },
+    "syntax": {
+      "score": 1.0,
+      "evidence": {
+        "flags": "-Wall -Wextra -Werror -std=c11",
+        "warnings": [],
+        "errors": []
+      },
+      "feedback": "compiles cleanly with -Wall -Wextra -Werror -std=c11",
+      "weight": 0.1,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them."
+    },
+    "structure": {
+      "score": 1.0,
+      "evidence": {
+        "functions": [
+          {
+            "name": "plus",
+            "line": 5,
+            "cyclomatic": 1,
+            "length": 4
+          },
+          {
+            "name": "main",
+            "line": 10,
+            "cyclomatic": 2,
+            "length": 9
+          }
+        ],
+        "cppcheck": [],
+        "problems": []
+      },
+      "feedback": "all functions within limits (cyclomatic <= 8, length <= 40); cppcheck found nothing",
+      "weight": 0.1,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports."
+    },
+    "modularity": {
+      "score": 1.0,
+      "evidence": {
+        "functions_defined": [
+          "plus",
+          "main"
+        ],
+        "helpers_used": [
+          "plus"
+        ],
+        "helpers_unused": [],
+        "counted": 2,
+        "expected_min": 2
+      },
+      "feedback": "work is split into 2 functions: plus, main",
+      "weight": 0.1,
+      "advice": "Move the real work into a helper function, for example int add(int a, int b), and call it from main."
+    },
+    "logical": {
+      "score": 1.0,
+      "evidence": {
+        "passed": 20,
+        "total": 20,
+        "cases": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "failures": []
+      },
+      "feedback": "20 of 20 edge cases match the reference",
+      "weight": 0.1,
+      "advice": "Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum."
+    },
+    "complexity": {
+      "score": 1.0,
+      "evidence": {
+        "required": "O(1)",
+        "estimated": "O(1)",
+        "growth": 0.05,
+        "timings": [
+          {
+            "n": 1000000,
+            "median_s": 0.004
+          },
+          {
+            "n": 10000000,
+            "median_s": 0.004
+          },
+          {
+            "n": 100000000,
+            "median_s": 0.005
+          }
+        ]
+      },
+      "feedback": "O(1) confirmed (required O(1))",
+      "weight": 0.1,
+      "advice": "Compute the sum directly with a + b instead of a loop that grows with the numbers."
+    },
+    "memory_safety": {
+      "score": 1.0,
+      "evidence": {
+        "flags": "-fsanitize=address,undefined",
+        "inputs_run": 10,
+        "problems": [],
+        "timeouts": []
+      },
+      "feedback": "ASan/UBSan clean on 10 input(s)",
+      "weight": 0.1,
+      "advice": "Free what you allocate, never use a null or freed pointer, and avoid signed overflow."
+    },
+    "readability": {
+      "score": 0.7,
+      "evidence": {
+        "model": "openai/gpt-oss-120b",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\":7,\"reasons\":[\"Descriptive variable names but generic function name\\\",\\\"Comment unrelated to functionality\\\",\\\"Consistent indentation and spacing\"]}",
+        "cache_file": "cache/llm/1413b7ffeb04b09b250bb56f72f68121a7854069be58c92e0c2b12366c1fc16a.json"
+      },
+      "feedback": "7/10 from openai/gpt-oss-120b: Descriptive variable names but generic function name; Comment unrelated to functionality; Consistent indentation and spacing",
+      "weight": 0.1,
+      "advice": "Use clear names, consistent indentation and a short comment above each function."
+    },
+    "originality": {
+      "score": 1.0,
+      "evidence": {
+        "max_similarity": 1.0,
+        "closest_file": "submissions/add/add_good.c",
+        "flag_threshold": 0.85
+      },
+      "feedback": "max similarity 1.00 with submissions/add/add_good.c: flagged for the teacher",
+      "flag": "suspected copying: similarity 1.00 with submissions/add/add_good.c (threshold 0.85); please check by hand",
+      "weight": 0.1,
+      "advice": "Write the solution yourself and be ready to explain every line."
+    }
+  },
+  "flags": [
+    "originality: suspected copying: similarity 1.00 with submissions/add/add_good.c (threshold 0.85); please check by hand"
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "add.c prints -2147483648 for the input 2147483647 1. The report shows the input, the expected 2147483648, what the program printed, and says to use long long.",
+        "benefit": "The student sees exactly which input breaks the program and how to fix it."
+      },
+      {
+        "use_case": "Finding copies for the teacher",
+        "example": "add_copy.c is add_good.c with every name changed. The agent still finds a similarity of 1.00 and raises a flag.",
+        "benefit": "The teacher checks only the flagged pairs instead of every submission."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short programs look copied even when they are not",
+        "example": "add.c has a similarity of 1.00 with an answer from the qwen LLM, because the obvious 5-line solution is the same for everyone.",
+        "mitigation": "A flag never lowers the grade; the teacher decides."
+      },
+      {
+        "limitation": "The readability score is the opinion of an LLM",
+        "example": "add_syntax_error.c is neatly written but got 3/10 for one missing ';', while the more cramped add.c got 6/10.",
+        "mitigation": "Readability is only 10% of the grade, and answers are cached so the score does not change between runs."
+      }
+    ]
+  }
+}

@@ -1,0 +1,566 @@
+{
+  "submission": "submissions/add/add_crash.c",
+  "grade": 43.5,
+  "rules_sha256": "b993f21f617bb6825b4523d28fd8f9f4c7c583d108c0b6a9484c701f83810654",
+  "tool_versions": {
+    "python": "3.14.4",
+    "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "cppcheck": "Cppcheck 2.19.0",
+    "lizard": "1.24.2"
+  },
+  "first_pass": {
+    "source": "submissions/add/add_crash.c",
+    "checks": {
+      "has_main": true,
+      "uses_scanf": true,
+      "uses_printf": true,
+      "has_return": true
+    },
+    "compiled": true,
+    "compiler_output": "",
+    "binary": "build/add/add_crash",
+    "smoke": {
+      "status": "crash",
+      "returncode": -11,
+      "signal": "SIGSEGV",
+      "stdout": "",
+      "stderr": "",
+      "time_s": 0.004
+    },
+    "suspected_infinite_loop": false,
+    "can_run": true
+  },
+  "run_problems": [
+    {
+      "status": "crash",
+      "where": "smoke run (sample input)"
+    },
+    {
+      "status": "crash",
+      "where": "test 01"
+    },
+    {
+      "status": "crash",
+      "where": "test 02"
+    },
+    {
+      "status": "crash",
+      "where": "test 03"
+    },
+    {
+      "status": "crash",
+      "where": "test 04"
+    },
+    {
+      "status": "crash",
+      "where": "test 05"
+    },
+    {
+      "status": "crash",
+      "where": "test 06"
+    },
+    {
+      "status": "crash",
+      "where": "test 07"
+    },
+    {
+      "status": "crash",
+      "where": "test 08"
+    },
+    {
+      "status": "crash",
+      "where": "test 09"
+    },
+    {
+      "status": "crash",
+      "where": "test 10"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case negatives"
+    },
+    {
+      "status": "crash",
+      "where": "edge case zero"
+    },
+    {
+      "status": "crash",
+      "where": "edge case zero"
+    },
+    {
+      "status": "crash",
+      "where": "edge case zero"
+    },
+    {
+      "status": "crash",
+      "where": "edge case zero"
+    },
+    {
+      "status": "crash",
+      "where": "edge case zero"
+    },
+    {
+      "status": "crash",
+      "where": "edge case zero"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "crash",
+      "where": "complexity input n = 1000000"
+    }
+  ],
+  "metrics": {
+    "correctness": {
+      "score": 0.0,
+      "evidence": {
+        "passed": 0,
+        "total": 10,
+        "failures": [
+          {
+            "test": "01",
+            "input": "7 5",
+            "expected": "12",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "02",
+            "input": "0 0",
+            "expected": "0",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "03",
+            "input": "-3 -4",
+            "expected": "-7",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "04",
+            "input": "-10 4",
+            "expected": "-6",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "05",
+            "input": "100000 200000",
+            "expected": "300000",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "06",
+            "input": "2147483647 0",
+            "expected": "2147483647",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "07",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "08",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "09",
+            "input": "12     30",
+            "expected": "42",
+            "got": "",
+            "status": "crash"
+          },
+          {
+            "test": "10",
+            "input": "-2147483648 2147483647",
+            "expected": "-1",
+            "got": "",
+            "status": "crash"
+          }
+        ]
+      },
+      "feedback": "0 of 10 tests pass; first failure 01: input '7 5', expected '12', got '' (crash)",
+      "weight": 0.2,
+      "advice": "Run your program on the failing inputs above, including very large and very small numbers."
+    },
+    "syntax": {
+      "score": 1.0,
+      "evidence": {
+        "flags": "-Wall -Wextra -Werror -std=c11",
+        "warnings": [],
+        "errors": []
+      },
+      "feedback": "compiles cleanly with -Wall -Wextra -Werror -std=c11",
+      "weight": 0.1,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them."
+    },
+    "structure": {
+      "score": 0.6,
+      "evidence": {
+        "functions": [
+          {
+            "name": "main",
+            "line": 5,
+            "cyclomatic": 1,
+            "length": 9
+          }
+        ],
+        "cppcheck": [
+          {
+            "line": 10,
+            "severity": "error",
+            "id": "nullPointer",
+            "message": "Null pointer dereference: result"
+          },
+          {
+            "line": 11,
+            "severity": "error",
+            "id": "nullPointer",
+            "message": "Null pointer dereference: result"
+          }
+        ],
+        "problems": [
+          "cppcheck line 10: Null pointer dereference: result [nullPointer]",
+          "cppcheck line 11: Null pointer dereference: result [nullPointer]"
+        ]
+      },
+      "feedback": "2 problem(s); first: cppcheck line 10: Null pointer dereference: result [nullPointer]",
+      "weight": 0.1,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports."
+    },
+    "modularity": {
+      "score": 0.5,
+      "evidence": {
+        "functions_defined": [
+          "main"
+        ],
+        "helpers_used": [],
+        "helpers_unused": [],
+        "counted": 1,
+        "expected_min": 2
+      },
+      "feedback": "only main() is defined; move a piece of the work into a helper function and call it from main",
+      "weight": 0.1,
+      "advice": "Move the real work into a helper function, for example int add(int a, int b), and call it from main."
+    },
+    "logical": {
+      "score": 0.0,
+      "evidence": {
+        "passed": 0,
+        "total": 20,
+        "cases": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "failures": [
+          {
+            "case": "negatives",
+            "input": "-7 -5",
+            "expected": "-12",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "negatives",
+            "input": "-7 5",
+            "expected": "-2",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "negatives",
+            "input": "7 -5",
+            "expected": "2",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "negatives",
+            "input": "-1 -1",
+            "expected": "-2",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "negatives",
+            "input": "-346 -772",
+            "expected": "-1118",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "negatives",
+            "input": "-975 518",
+            "expected": "-457",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "negatives",
+            "input": "-719 -499",
+            "expected": "-1218",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "zero",
+            "input": "0 0",
+            "expected": "0",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "zero",
+            "input": "0 5",
+            "expected": "5",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "zero",
+            "input": "-5 0",
+            "expected": "-5",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "zero",
+            "input": "0 -543",
+            "expected": "-543",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "zero",
+            "input": "-715 0",
+            "expected": "-715",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "zero",
+            "input": "0 508",
+            "expected": "508",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147483647 2147483647",
+            "expected": "4294967294",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "-2147483648 -2147483648",
+            "expected": "-4294967296",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147482751 1589",
+            "expected": "2147484340",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "-2147482890 -845",
+            "expected": "-2147483735",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147483205 532",
+            "expected": "2147483737",
+            "got": "",
+            "status": "crash",
+            "reason": "the program did not finish normally (crash), so it gave no answer"
+          }
+        ]
+      },
+      "feedback": "0 of 20 edge cases match the reference; negatives: input '-7 -5', expected '-12', got '' (crash): the program did not finish normally (crash), so it gave no answer",
+      "weight": 0.1,
+      "advice": "Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum."
+    },
+    "complexity": {
+      "score": 0.0,
+      "evidence": {
+        "required": "O(1)",
+        "timings": [],
+        "failed_at": 1000000,
+        "status": "crash"
+      },
+      "feedback": "program did not finish normally at size 1000000 (crash), so it is slower than O(1) or broken",
+      "weight": 0.1,
+      "advice": "Compute the sum directly with a + b instead of a loop that grows with the numbers."
+    },
+    "memory_safety": {
+      "score": 0.75,
+      "evidence": {
+        "flags": "-fsanitize=address,undefined",
+        "inputs_run": 10,
+        "problems": [
+          {
+            "kind": "undefined behaviour",
+            "where": "add_crash.c:10",
+            "message": "store to null pointer of type 'int'",
+            "input": "7 5"
+          }
+        ],
+        "timeouts": []
+      },
+      "feedback": "1 problem(s); first: undefined behaviour at add_crash.c:10 (store to null pointer of type 'int') on input '7 5'",
+      "weight": 0.1,
+      "advice": "Free what you allocate, never use a null or freed pointer, and avoid signed overflow."
+    },
+    "readability": {
+      "score": 0.5,
+      "evidence": {
+        "model": "openai/gpt-oss-120b",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\":5,\"reasons\":[\"Variable names are generic\",\"Unnecessary pointer usage makes logic confusing\"]}",
+        "cache_file": "cache/llm/374f1512717ae6e892ef80d38d0e13d4c9ff32b04929a962d75fa3c92bd6ac98.json"
+      },
+      "feedback": "5/10 from openai/gpt-oss-120b: Variable names are generic; Unnecessary pointer usage makes logic confusing",
+      "weight": 0.1,
+      "advice": "Use clear names, consistent indentation and a short comment above each function."
+    },
+    "originality": {
+      "score": 1.0,
+      "evidence": {
+        "max_similarity": 0.6,
+        "closest_file": "submissions/add/add_syntax_error.c",
+        "flag_threshold": 0.85
+      },
+      "feedback": "max similarity 0.60 with submissions/add/add_syntax_error.c (not flagged)",
+      "weight": 0.1,
+      "advice": "Write the solution yourself and be ready to explain every line."
+    }
+  },
+  "flags": [],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "add.c prints -2147483648 for the input 2147483647 1. The report shows the input, the expected 2147483648, what the program printed, and says to use long long.",
+        "benefit": "The student sees exactly which input breaks the program and how to fix it."
+      },
+      {
+        "use_case": "Finding copies for the teacher",
+        "example": "add_copy.c is add_good.c with every name changed. The agent still finds a similarity of 1.00 and raises a flag.",
+        "benefit": "The teacher checks only the flagged pairs instead of every submission."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short programs look copied even when they are not",
+        "example": "add.c has a similarity of 1.00 with an answer from the qwen LLM, because the obvious 5-line solution is the same for everyone.",
+        "mitigation": "A flag never lowers the grade; the teacher decides."
+      },
+      {
+        "limitation": "The readability score is the opinion of an LLM",
+        "example": "add_syntax_error.c is neatly written but got 3/10 for one missing ';', while the more cramped add.c got 6/10.",
+        "mitigation": "Readability is only 10% of the grade, and answers are cached so the score does not change between runs."
+      }
+    ]
+  }
+}

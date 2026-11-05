@@ -1,0 +1,1 @@
+{"score":3,"reasons":["Unclear variable names (a, b)","No comments explaining purpose","Missing semicolon after scanf affects readability"]}

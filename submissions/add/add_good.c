@@ -1,9 +1,7 @@
 #include <stdio.h>
 
-/* Return the sum of two integers. 
- * long long holds any sum of two ints,
- * so INT_MAX + 1 does not overflow. 
- */
+/* Return the sum of two integers. long long holds any sum of two ints,
+   so INT_MAX + 1 does not overflow. */
 long long add(long long first, long long second)
 {
     return first + second;

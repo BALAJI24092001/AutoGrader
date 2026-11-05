@@ -1,0 +1,52 @@
+===== Grading report for add_infinite.c =====
+Overall grade: 40.0 / 100
+First pass: compiled, smoke run timeout (suspected infinite loop: only source-based analyzers run)
+Runs that did not finish normally: timeout on 1 run(s) (smoke run
+(sample input))
+
+Metric          Weight    Score  Contribution  Feedback
+correctness         20     0/20           0.0  not run: suspected infinite loop (smoke run timed out)
+syntax              10    10/10          10.0  compiles cleanly with -Wall -Wextra -Werror -std=c11
+structure           10    10/10          10.0  all functions within limits (cyclomatic <= 8, length <= 40); cppcheck found nothing
+modularity          10     5/10           5.0  only main() is defined; move a piece of the work into a helper function and call it from main
+logical             10     0/10           0.0  not run: suspected infinite loop (smoke run timed out)
+complexity          10     0/10           0.0  not run: suspected infinite loop (smoke run timed out)
+memory_safety       10     0/10           0.0  not run: suspected infinite loop (smoke run timed out)
+readability         10     5/10           5.0  5/10 from openai/gpt-oss-120b: Generic variable names (a, b); Lack of inline comments explaining the loop; Infinite loop logic is not obvious from the code
+originality         10    10/10          10.0  max similarity 0.70 with submissions/add/add_syntax_error.c (not flagged)
+
+--- Where you failed ---
+The tests could not be run: suspected infinite loop (smoke run timed out).
+
+--- Suggestions to raise the grade ---
+- correctness: Run your program on the failing inputs above, including very large and very small numbers.
+- modularity: Move the real work into a helper function, for example int add(int a, int b), and call it from main.
+- logical: Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum.
+- complexity: Compute the sum directly with a + b instead of a loop that grows with the numbers.
+- memory_safety: Free what you allocate, never use a null or freed pointer, and avoid signed overflow.
+- readability: Use clear names, consistent indentation and a short comment above each function.
+
+--- Usefulness & limitations of this evaluation ---
+Useful for:
+  1. Explaining a wrong answer to the student
+     Example: add.c prints -2147483648 for the input 2147483647 1. The
+     report shows the input, the expected 2147483648, what the program
+     printed, and says to use long long.
+     Benefit: The student sees exactly which input breaks the program
+     and how to fix it.
+  2. Finding copies for the teacher
+     Example: add_copy.c is add_good.c with every name changed. The
+     agent still finds a similarity of 1.00 and raises a flag.
+     Benefit: The teacher checks only the flagged pairs instead of every
+     submission.
+Limits of this report:
+  1. Short programs look copied even when they are not
+     Example: add.c has a similarity of 1.00 with an answer from the
+     qwen LLM, because the obvious 5-line solution is the same for
+     everyone.
+     Fix: A flag never lowers the grade; the teacher decides.
+  2. The readability score is the opinion of an LLM
+     Example: add_syntax_error.c is neatly written but got 3/10 for one
+     missing ';', while the more cramped add.c got 6/10.
+     Fix: Readability is only 10% of the grade, and answers are cached
+     so the score does not change between runs.

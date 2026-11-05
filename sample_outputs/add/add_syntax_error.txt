@@ -1,0 +1,52 @@
+===== Grading report for add_syntax_error.c =====
+Overall grade: 26.0 / 100
+First pass: does not compile
+
+Metric          Weight    Score  Contribution  Feedback
+correctness         20     0/20           0.0  not run: does not compile
+syntax              10     0/10           0.0  does not compile with -Wall -Wextra -Werror -std=c11: submissions/add/add_syntax_error.c:6:27: error: expected ‘;’ before ‘printf’
+structure           10     8/10           8.0  1 problem(s); first: cppcheck line 6: There is an unknown macro here somewhere. Configuration is required. If scanf is a macro then please configure it. [unknownMacro]
+modularity          10     5/10           5.0  only main() is defined; move a piece of the work into a helper function and call it from main
+logical             10     0/10           0.0  not run: does not compile
+complexity          10     0/10           0.0  not run: does not compile
+memory_safety       10     0/10           0.0  not run: does not compile
+readability         10     3/10           3.0  3/10 from openai/gpt-oss-120b: Unclear variable names (a, b); No comments explaining purpose; Missing semicolon after scanf reduces readability
+originality         10    10/10          10.0  max similarity 0.76 with submissions/add/add.c (not flagged)
+
+--- Where you failed ---
+The tests could not be run: does not compile.
+
+--- Suggestions to raise the grade ---
+- correctness: Run your program on the failing inputs above, including very large and very small numbers.
+- syntax: Fix every compiler warning; compile with -Wall -Wextra to see them.
+- structure: Keep each function short and simple, and fix what cppcheck reports.
+- modularity: Move the real work into a helper function, for example int add(int a, int b), and call it from main.
+- logical: Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum.
+- complexity: Compute the sum directly with a + b instead of a loop that grows with the numbers.
+- memory_safety: Free what you allocate, never use a null or freed pointer, and avoid signed overflow.
+- readability: Use clear names, consistent indentation and a short comment above each function.
+
+--- Usefulness & limitations of this evaluation ---
+Useful for:
+  1. Explaining a wrong answer to the student
+     Example: add.c prints -2147483648 for the input 2147483647 1. The
+     report shows the input, the expected 2147483648, what the program
+     printed, and says to use long long.
+     Benefit: The student sees exactly which input breaks the program
+     and how to fix it.
+  2. Finding copies for the teacher
+     Example: add_copy.c is add_good.c with every name changed. The
+     agent still finds a similarity of 1.00 and raises a flag.
+     Benefit: The teacher checks only the flagged pairs instead of every
+     submission.
+Limits of this report:
+  1. Short programs look copied even when they are not
+     Example: add.c has a similarity of 1.00 with an answer from the
+     qwen LLM, because the obvious 5-line solution is the same for
+     everyone.
+     Fix: A flag never lowers the grade; the teacher decides.
+  2. The readability score is the opinion of an LLM
+     Example: add_syntax_error.c is neatly written but got 3/10 for one
+     missing ';', while the more cramped add.c got 6/10.
+     Fix: Readability is only 10% of the grade, and answers are cached
+     so the score does not change between runs.

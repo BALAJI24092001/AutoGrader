@@ -1,0 +1,87 @@
+===== Grading report for add_crash.c =====
+Overall grade: 43.5 / 100
+First pass: compiled, smoke run crash
+Runs that did not finish normally: crash on 32 run(s) (smoke run (sample
+input), test 01, test 02 and 29 more)
+
+Metric          Weight    Score  Contribution  Feedback
+correctness         20     0/20           0.0  0 of 10 tests pass; first failure 01: input '7 5', expected '12', got '' (crash)
+syntax              10    10/10          10.0  compiles cleanly with -Wall -Wextra -Werror -std=c11
+structure           10     6/10           6.0  2 problem(s); first: cppcheck line 10: Null pointer dereference: result [nullPointer]
+modularity          10     5/10           5.0  only main() is defined; move a piece of the work into a helper function and call it from main
+logical             10     0/10           0.0  0 of 20 edge cases match the reference; negatives: input '-7 -5', expected '-12', got '' (crash): the program did not finish normally (crash), so it gave no answer
+complexity          10     0/10           0.0  program did not finish normally at size 1000000 (crash), so it is slower than O(1) or broken
+memory_safety       10   7.5/10           7.5  1 problem(s); first: undefined behaviour at add_crash.c:10 (store to null pointer of type 'int') on input '7 5'
+readability         10     5/10           5.0  5/10 from openai/gpt-oss-120b: Variable names are generic; Unnecessary pointer usage makes logic confusing
+originality         10    10/10          10.0  max similarity 0.60 with submissions/add/add_syntax_error.c (not flagged)
+
+--- Where you failed ---
+Test 01
+   INPUT:    7 5
+   EXPECTED: 12
+   GOT:      (nothing)
+   WHY:      the program crashed before printing an answer
+Test 02
+   INPUT:    0 0
+   EXPECTED: 0
+   GOT:      (nothing)
+   WHY:      the program crashed before printing an answer
+Test 03
+   INPUT:    -3 -4
+   EXPECTED: -7
+   GOT:      (nothing)
+   WHY:      the program crashed before printing an answer
+... and 7 more failing tests
+Edge case (negatives)
+   INPUT:    -7 -5
+   EXPECTED: -12
+   GOT:      (nothing)
+   WHY:      the program did not finish normally (crash), so it gave no
+             answer
+Edge case (negatives)
+   INPUT:    -7 5
+   EXPECTED: -2
+   GOT:      (nothing)
+   WHY:      the program did not finish normally (crash), so it gave no
+             answer
+Edge case (negatives)
+   INPUT:    7 -5
+   EXPECTED: 2
+   GOT:      (nothing)
+   WHY:      the program did not finish normally (crash), so it gave no
+             answer
+... and 14 more failing edge cases
+
+--- Suggestions to raise the grade ---
+- correctness: Run your program on the failing inputs above, including very large and very small numbers.
+- structure: Keep each function short and simple, and fix what cppcheck reports.
+- modularity: Move the real work into a helper function, for example int add(int a, int b), and call it from main.
+- logical: Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum.
+- complexity: Compute the sum directly with a + b instead of a loop that grows with the numbers.
+- memory_safety: Free what you allocate, never use a null or freed pointer, and avoid signed overflow.
+- readability: Use clear names, consistent indentation and a short comment above each function.
+
+--- Usefulness & limitations of this evaluation ---
+Useful for:
+  1. Explaining a wrong answer to the student
+     Example: add.c prints -2147483648 for the input 2147483647 1. The
+     report shows the input, the expected 2147483648, what the program
+     printed, and says to use long long.
+     Benefit: The student sees exactly which input breaks the program
+     and how to fix it.
+  2. Finding copies for the teacher
+     Example: add_copy.c is add_good.c with every name changed. The
+     agent still finds a similarity of 1.00 and raises a flag.
+     Benefit: The teacher checks only the flagged pairs instead of every
+     submission.
+Limits of this report:
+  1. Short programs look copied even when they are not
+     Example: add.c has a similarity of 1.00 with an answer from the
+     qwen LLM, because the obvious 5-line solution is the same for
+     everyone.
+     Fix: A flag never lowers the grade; the teacher decides.
+  2. The readability score is the opinion of an LLM
+     Example: add_syntax_error.c is neatly written but got 3/10 for one
+     missing ';', while the more cramped add.c got 6/10.
+     Fix: Readability is only 10% of the grade, and answers are cached
+     so the score does not change between runs.

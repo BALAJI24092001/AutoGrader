@@ -94,7 +94,10 @@ def run(command, input_text, time_limit_s, memory_limit_mb):
             proc.wait(timeout=time_limit_s)
         except subprocess.TimeoutExpired:
             timed_out = True
-            os.killpg(proc.pid, signal.SIGKILL)
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass  # it ended by itself just as the time ran out
             proc.wait()
         elapsed = time.monotonic() - start
 

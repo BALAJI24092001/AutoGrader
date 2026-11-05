@@ -1,0 +1,239 @@
+{
+  "submission": "submissions/search/search_off_by_one.c",
+  "grade": 80.0,
+  "rules_sha256": "e718712b618a47ad90811e75712deb3c81a9c58dbd69cc0d09bd69053b314ea4",
+  "tool_versions": {
+    "python": "3.14.4",
+    "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "cppcheck": "Cppcheck 2.19.0",
+    "lizard": "1.24.2"
+  },
+  "first_pass": {
+    "source": "submissions/search/search_off_by_one.c",
+    "checks": {
+      "has_main": true,
+      "uses_scanf": true,
+      "uses_printf": true,
+      "has_return": true
+    },
+    "compiled": true,
+    "compiler_output": "",
+    "binary": "build/search/search_off_by_one",
+    "smoke": {
+      "status": "ok",
+      "returncode": 0,
+      "signal": null,
+      "stdout": "2\n",
+      "stderr": "",
+      "time_s": 0.005
+    },
+    "suspected_infinite_loop": false,
+    "can_run": true
+  },
+  "run_problems": [],
+  "metrics": {
+    "correctness": {
+      "score": 0.75,
+      "evidence": {
+        "passed": 6,
+        "total": 8,
+        "failures": [
+          {
+            "test": "03",
+            "input": "5\n4 8 15 16 23\n23",
+            "expected": "4",
+            "got": "-1",
+            "status": "ok"
+          },
+          {
+            "test": "05",
+            "input": "1\n7\n7",
+            "expected": "0",
+            "got": "-1",
+            "status": "ok"
+          }
+        ]
+      },
+      "feedback": "6 of 8 tests pass; first failure 03: input '5\\n4 8 15 16 23\\n23', expected '4', got '-1' (ok)",
+      "weight": 0.2,
+      "advice": "Run your program on the failing inputs above, especially a match in the last position and an empty array."
+    },
+    "syntax": {
+      "score": 1.0,
+      "evidence": {
+        "flags": "-Wall -Wextra -Werror -std=c11",
+        "warnings": [],
+        "errors": []
+      },
+      "feedback": "compiles cleanly with -Wall -Wextra -Werror -std=c11",
+      "weight": 0.1,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them."
+    },
+    "structure": {
+      "score": 1.0,
+      "evidence": {
+        "functions": [
+          {
+            "name": "main",
+            "line": 3,
+            "cyclomatic": 4,
+            "length": 18
+          }
+        ],
+        "cppcheck": [],
+        "problems": []
+      },
+      "feedback": "all functions within limits (cyclomatic <= 8, length <= 40); cppcheck found nothing",
+      "weight": 0.1,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports."
+    },
+    "modularity": {
+      "score": 0.5,
+      "evidence": {
+        "functions_defined": [
+          "main"
+        ],
+        "helpers_used": [],
+        "helpers_unused": [],
+        "counted": 1,
+        "expected_min": 2
+      },
+      "feedback": "only main() is defined; move a piece of the work into a helper function and call it from main",
+      "weight": 0.1,
+      "advice": "Move the search into a helper function, for example int find_first(const int *values, int n, int target), and call it from main."
+    },
+    "logical": {
+      "score": 0.75,
+      "evidence": {
+        "passed": 6,
+        "total": 8,
+        "cases": [
+          "all_duplicates",
+          "int_limits",
+          "last_only",
+          "n_zero",
+          "not_found_large",
+          "single_found",
+          "single_missing",
+          "target_is_n"
+        ],
+        "failures": [
+          {
+            "case": "last_only",
+            "input": "8\n1 2 3 4 5 6 7 8\n8",
+            "expected": "7",
+            "got": "-1",
+            "status": "ok",
+            "reason": "the target is the last number but was not found; the loop probably stops one step early (i < n - 1)"
+          },
+          {
+            "case": "single_found",
+            "input": "1\n-3\n-3",
+            "expected": "0",
+            "got": "-1",
+            "status": "ok",
+            "reason": "wrong result when the only number is the target; check the loop bounds"
+          }
+        ]
+      },
+      "feedback": "6 of 8 edge cases match the reference; last_only: input '8\\n1 2 3 4 5 6 7 8\\n8', expected '7', got '-1' (ok): the target is the last number but was not found; the loop probably stops one step early (i < n - 1)",
+      "weight": 0.1,
+      "advice": "Test an empty array (n = 0), a single number, a match in the last position and repeated values."
+    },
+    "complexity": {
+      "score": 1.0,
+      "evidence": {
+        "required": "O(n)",
+        "estimated": "O(n)",
+        "growth": 0.59,
+        "timings": [
+          {
+            "n": 10000,
+            "median_s": 0.008
+          },
+          {
+            "n": 100000,
+            "median_s": 0.021
+          },
+          {
+            "n": 1000000,
+            "median_s": 0.119
+          }
+        ]
+      },
+      "feedback": "O(n) confirmed (required O(n))",
+      "weight": 0.1,
+      "advice": "Look at each number once from left to right; sorting first costs more than the search itself."
+    },
+    "memory_safety": {
+      "score": 0.75,
+      "evidence": {
+        "flags": "-fsanitize=address,undefined",
+        "inputs_run": 8,
+        "problems": [
+          {
+            "kind": "undefined behaviour",
+            "where": "search_off_by_one.c:7",
+            "message": "variable length array bound evaluates to non-positive value 0",
+            "input": "0\n\n3"
+          }
+        ],
+        "timeouts": []
+      },
+      "feedback": "1 problem(s); first: undefined behaviour at search_off_by_one.c:7 (variable length array bound evaluates to non-positive value 0) on input '0\\n\\n3'",
+      "weight": 0.1,
+      "advice": "Never read past the end of the array, free what you allocate, and handle n = 0."
+    },
+    "readability": {
+      "score": 0.5,
+      "evidence": {
+        "model": "openai/gpt-oss-120b",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\":5,\"reasons\":[\"Variable names are short and non\u2011descriptive (n, t, a)\",\"No comments explaining purpose or logic\",\"Inconsistent use of braces and indentation style\"]}",
+        "cache_file": "cache/llm/9ef532ca295b6ae41ac413e2466f2a1a0f59948e294f9bbff206bcf1bb83a28b.json"
+      },
+      "feedback": "5/10 from openai/gpt-oss-120b: Variable names are short and non\u2011descriptive (n, t, a); No comments explaining purpose or logic; Inconsistent use of braces and indentation style",
+      "weight": 0.1,
+      "advice": "Use clear names, consistent indentation and a short comment above each function."
+    },
+    "originality": {
+      "score": 1.0,
+      "evidence": {
+        "max_similarity": 0.57,
+        "closest_file": "submissions/search/search_sort.c",
+        "flag_threshold": 0.85
+      },
+      "feedback": "max similarity 0.57 with submissions/search/search_sort.c (not flagged)",
+      "weight": 0.1,
+      "advice": "Write the solution yourself and be ready to explain every line."
+    }
+  },
+  "flags": [],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "search_off_by_one.c prints -1 when the target 8 is the last of 8 numbers. The report shows the input, the expected 7, and says the loop probably stops one step early (i < n - 1).",
+        "benefit": "The student sees the exact input that breaks the program and the likely line to fix."
+      },
+      {
+        "use_case": "Catching a correct but slow solution",
+        "example": "search_sort.c passes all 8 tests and all 8 edge cases, but it bubble sorts first and times out at n = 100000, so it gets 0 for complexity.",
+        "benefit": "Tests alone would give full marks; the timing shows the algorithm is O(n^2)."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "O(n log n) passes as O(n)",
+        "example": "A version that sorts with qsort and then does a binary search measured a growth of 0.69, the same as search_good.c, and was judged O(n). Reading the input takes most of the time.",
+        "mitigation": "The report gives the measured growth, so a teacher can read the code to check the class."
+      },
+      {
+        "limitation": "A crash at a large size looks like a slow program",
+        "example": "search_crash.c is O(n), but its recursion is a million calls deep at n = 1000000 and runs out of stack. The report says it is slower than O(n) or broken.",
+        "mitigation": "The evidence in the JSON report shows the status was a crash, not a timeout."
+      }
+    ]
+  }
+}

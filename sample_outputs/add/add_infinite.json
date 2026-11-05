@@ -1,0 +1,172 @@
+{
+  "submission": "submissions/add/add_infinite.c",
+  "grade": 40.0,
+  "rules_sha256": "b993f21f617bb6825b4523d28fd8f9f4c7c583d108c0b6a9484c701f83810654",
+  "tool_versions": {
+    "python": "3.14.4",
+    "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "cppcheck": "Cppcheck 2.19.0",
+    "lizard": "1.24.2"
+  },
+  "first_pass": {
+    "source": "submissions/add/add_infinite.c",
+    "checks": {
+      "has_main": true,
+      "uses_scanf": true,
+      "uses_printf": true,
+      "has_return": true
+    },
+    "compiled": true,
+    "compiler_output": "",
+    "binary": "build/add/add_infinite",
+    "smoke": {
+      "status": "timeout",
+      "returncode": -9,
+      "signal": "SIGKILL",
+      "stdout": "",
+      "stderr": "",
+      "time_s": 1.004
+    },
+    "suspected_infinite_loop": true,
+    "can_run": false
+  },
+  "run_problems": [
+    {
+      "status": "timeout",
+      "where": "smoke run (sample input)"
+    }
+  ],
+  "metrics": {
+    "correctness": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "suspected infinite loop (smoke run timed out)"
+      },
+      "feedback": "not run: suspected infinite loop (smoke run timed out)",
+      "weight": 0.2,
+      "advice": "Run your program on the failing inputs above, including very large and very small numbers."
+    },
+    "syntax": {
+      "score": 1.0,
+      "evidence": {
+        "flags": "-Wall -Wextra -Werror -std=c11",
+        "warnings": [],
+        "errors": []
+      },
+      "feedback": "compiles cleanly with -Wall -Wextra -Werror -std=c11",
+      "weight": 0.1,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them."
+    },
+    "structure": {
+      "score": 1.0,
+      "evidence": {
+        "functions": [
+          {
+            "name": "main",
+            "line": 5,
+            "cyclomatic": 2,
+            "length": 10
+          }
+        ],
+        "cppcheck": [],
+        "problems": []
+      },
+      "feedback": "all functions within limits (cyclomatic <= 8, length <= 40); cppcheck found nothing",
+      "weight": 0.1,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports."
+    },
+    "modularity": {
+      "score": 0.5,
+      "evidence": {
+        "functions_defined": [
+          "main"
+        ],
+        "helpers_used": [],
+        "helpers_unused": [],
+        "counted": 1,
+        "expected_min": 2
+      },
+      "feedback": "only main() is defined; move a piece of the work into a helper function and call it from main",
+      "weight": 0.1,
+      "advice": "Move the real work into a helper function, for example int add(int a, int b), and call it from main."
+    },
+    "logical": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "suspected infinite loop (smoke run timed out)"
+      },
+      "feedback": "not run: suspected infinite loop (smoke run timed out)",
+      "weight": 0.1,
+      "advice": "Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum."
+    },
+    "complexity": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "suspected infinite loop (smoke run timed out)"
+      },
+      "feedback": "not run: suspected infinite loop (smoke run timed out)",
+      "weight": 0.1,
+      "advice": "Compute the sum directly with a + b instead of a loop that grows with the numbers."
+    },
+    "memory_safety": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "suspected infinite loop (smoke run timed out)"
+      },
+      "feedback": "not run: suspected infinite loop (smoke run timed out)",
+      "weight": 0.1,
+      "advice": "Free what you allocate, never use a null or freed pointer, and avoid signed overflow."
+    },
+    "readability": {
+      "score": 0.5,
+      "evidence": {
+        "model": "openai/gpt-oss-120b",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\":5,\"reasons\":[\"Generic variable names (a, b)\",\"Lack of inline comments explaining the loop\",\"Infinite loop logic is not obvious from the code\"]}",
+        "cache_file": "cache/llm/7e10ffc3a4f3a8984217c4a989a31a9e9eeb963d79d344338cfcf6091466be75.json"
+      },
+      "feedback": "5/10 from openai/gpt-oss-120b: Generic variable names (a, b); Lack of inline comments explaining the loop; Infinite loop logic is not obvious from the code",
+      "weight": 0.1,
+      "advice": "Use clear names, consistent indentation and a short comment above each function."
+    },
+    "originality": {
+      "score": 1.0,
+      "evidence": {
+        "max_similarity": 0.7,
+        "closest_file": "submissions/add/add_syntax_error.c",
+        "flag_threshold": 0.85
+      },
+      "feedback": "max similarity 0.70 with submissions/add/add_syntax_error.c (not flagged)",
+      "weight": 0.1,
+      "advice": "Write the solution yourself and be ready to explain every line."
+    }
+  },
+  "flags": [],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "add.c prints -2147483648 for the input 2147483647 1. The report shows the input, the expected 2147483648, what the program printed, and says to use long long.",
+        "benefit": "The student sees exactly which input breaks the program and how to fix it."
+      },
+      {
+        "use_case": "Finding copies for the teacher",
+        "example": "add_copy.c is add_good.c with every name changed. The agent still finds a similarity of 1.00 and raises a flag.",
+        "benefit": "The teacher checks only the flagged pairs instead of every submission."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short programs look copied even when they are not",
+        "example": "add.c has a similarity of 1.00 with an answer from the qwen LLM, because the obvious 5-line solution is the same for everyone.",
+        "mitigation": "A flag never lowers the grade; the teacher decides."
+      },
+      {
+        "limitation": "The readability score is the opinion of an LLM",
+        "example": "add_syntax_error.c is neatly written but got 3/10 for one missing ';', while the more cramped add.c got 6/10.",
+        "mitigation": "Readability is only 10% of the grade, and answers are cached so the score does not change between runs."
+      }
+    ]
+  }
+}

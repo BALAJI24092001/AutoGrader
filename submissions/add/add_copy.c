@@ -1,21 +1,19 @@
 #include <stdio.h>
 
-/* Return the sum of two integers. 
- * long long holds any sum of two ints,
- * so INT_MAX + 1 does not overflow. 
- */
-long long add(long long first, long long second)
+/* A copy of add_good.c with every name and comment changed, to show that
+   the originality check still finds it. */
+long long plus(long long x_value, long long y_value)
 {
-    return first + second;
+    return x_value + y_value;
 }
 
 int main(void)
 {
-    long long first, second;
+    long long x_value, y_value;
 
-    if (scanf("%lld %lld", &first, &second) != 2) {
-        return 1;   /* input was not two integers */
+    if (scanf("%lld %lld", &x_value, &y_value) != 2) {
+        return 1;   /* bad input */
     }
-    printf("%lld\n", add(first, second));
+    printf("%lld\n", plus(x_value, y_value));
     return 0;
 }

@@ -1,0 +1,314 @@
+{
+  "submission": "submissions/add/add_loop.c",
+  "grade": 73.5,
+  "rules_sha256": "b993f21f617bb6825b4523d28fd8f9f4c7c583d108c0b6a9484c701f83810654",
+  "tool_versions": {
+    "python": "3.14.4",
+    "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "cppcheck": "Cppcheck 2.19.0",
+    "lizard": "1.24.2"
+  },
+  "first_pass": {
+    "source": "submissions/add/add_loop.c",
+    "checks": {
+      "has_main": true,
+      "uses_scanf": true,
+      "uses_printf": true,
+      "has_return": true
+    },
+    "compiled": true,
+    "compiler_output": "",
+    "binary": "build/add/add_loop",
+    "smoke": {
+      "status": "ok",
+      "returncode": 0,
+      "signal": null,
+      "stdout": "12\n",
+      "stderr": "",
+      "time_s": 0.005
+    },
+    "suspected_infinite_loop": false,
+    "can_run": true
+  },
+  "run_problems": [
+    {
+      "status": "timeout",
+      "where": "test 10"
+    },
+    {
+      "status": "timeout",
+      "where": "edge case int_overflow"
+    },
+    {
+      "status": "timeout",
+      "where": "edge case int_overflow"
+    }
+  ],
+  "metrics": {
+    "correctness": {
+      "score": 0.7,
+      "evidence": {
+        "passed": 7,
+        "total": 10,
+        "failures": [
+          {
+            "test": "07",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "-2147483648",
+            "status": "ok"
+          },
+          {
+            "test": "08",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "2147483647",
+            "status": "ok"
+          },
+          {
+            "test": "10",
+            "input": "-2147483648 2147483647",
+            "expected": "-1",
+            "got": "",
+            "status": "timeout"
+          }
+        ]
+      },
+      "feedback": "7 of 10 tests pass; first failure 07: input '2147483647 1', expected '2147483648', got '-2147483648' (ok)",
+      "weight": 0.2,
+      "advice": "Run your program on the failing inputs above, including very large and very small numbers."
+    },
+    "syntax": {
+      "score": 1.0,
+      "evidence": {
+        "flags": "-Wall -Wextra -Werror -std=c11",
+        "warnings": [],
+        "errors": []
+      },
+      "feedback": "compiles cleanly with -Wall -Wextra -Werror -std=c11",
+      "weight": 0.1,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them."
+    },
+    "structure": {
+      "score": 1.0,
+      "evidence": {
+        "functions": [
+          {
+            "name": "add",
+            "line": 4,
+            "cyclomatic": 3,
+            "length": 12
+          },
+          {
+            "name": "main",
+            "line": 17,
+            "cyclomatic": 2,
+            "length": 9
+          }
+        ],
+        "cppcheck": [],
+        "problems": []
+      },
+      "feedback": "all functions within limits (cyclomatic <= 8, length <= 40); cppcheck found nothing",
+      "weight": 0.1,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports."
+    },
+    "modularity": {
+      "score": 1.0,
+      "evidence": {
+        "functions_defined": [
+          "add",
+          "main"
+        ],
+        "helpers_used": [
+          "add"
+        ],
+        "helpers_unused": [],
+        "counted": 2,
+        "expected_min": 2
+      },
+      "feedback": "work is split into 2 functions: add, main",
+      "weight": 0.1,
+      "advice": "Move the real work into a helper function, for example int add(int a, int b), and call it from main."
+    },
+    "logical": {
+      "score": 0.65,
+      "evidence": {
+        "passed": 13,
+        "total": 20,
+        "cases": [
+          "negatives",
+          "zero",
+          "int_overflow"
+        ],
+        "failures": [
+          {
+            "case": "int_overflow",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "-2147483648",
+            "status": "ok",
+            "reason": "sum goes beyond int range; use long long (and %lld) for the numbers and the sum"
+          },
+          {
+            "case": "int_overflow",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "2147483647",
+            "status": "ok",
+            "reason": "sum goes beyond int range; use long long (and %lld) for the numbers and the sum"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147483647 2147483647",
+            "expected": "4294967294",
+            "got": "",
+            "status": "timeout",
+            "reason": "the program did not finish normally (timeout), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "-2147483648 -2147483648",
+            "expected": "-4294967296",
+            "got": "",
+            "status": "timeout",
+            "reason": "the program did not finish normally (timeout), so it gave no answer"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147482751 1589",
+            "expected": "2147484340",
+            "got": "-2147482956",
+            "status": "ok",
+            "reason": "sum goes beyond int range; use long long (and %lld) for the numbers and the sum"
+          },
+          {
+            "case": "int_overflow",
+            "input": "-2147482890 -845",
+            "expected": "-2147483735",
+            "got": "2147483561",
+            "status": "ok",
+            "reason": "sum goes beyond int range; use long long (and %lld) for the numbers and the sum"
+          },
+          {
+            "case": "int_overflow",
+            "input": "2147483205 532",
+            "expected": "2147483737",
+            "got": "-2147483559",
+            "status": "ok",
+            "reason": "sum goes beyond int range; use long long (and %lld) for the numbers and the sum"
+          }
+        ]
+      },
+      "feedback": "13 of 20 edge cases match the reference; int_overflow: input '2147483647 1', expected '2147483648', got '-2147483648' (ok): sum goes beyond int range; use long long (and %lld) for the numbers and the sum",
+      "weight": 0.1,
+      "advice": "Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum."
+    },
+    "complexity": {
+      "score": 0.0,
+      "evidence": {
+        "required": "O(1)",
+        "estimated": "O(n)",
+        "growth": 0.75,
+        "timings": [
+          {
+            "n": 1000000,
+            "median_s": 0.007
+          },
+          {
+            "n": 10000000,
+            "median_s": 0.036
+          },
+          {
+            "n": 100000000,
+            "median_s": 0.219
+          }
+        ]
+      },
+      "feedback": "estimated O(n), required O(1): time went from 0.007s at n=1000000 to 0.219s at n=100000000",
+      "weight": 0.1,
+      "advice": "Compute the sum directly with a + b instead of a loop that grows with the numbers."
+    },
+    "memory_safety": {
+      "score": 0.5,
+      "evidence": {
+        "flags": "-fsanitize=address,undefined",
+        "inputs_run": 10,
+        "problems": [
+          {
+            "kind": "undefined behaviour",
+            "where": "add_loop.c:7",
+            "message": "signed integer overflow: 2147483647 + 1 cannot be represented in type 'int'",
+            "input": "2147483647 1"
+          },
+          {
+            "kind": "undefined behaviour",
+            "where": "add_loop.c:11",
+            "message": "signed integer overflow: -2147483648 - 1 cannot be represented in type 'int'",
+            "input": "-2147483648 -1"
+          }
+        ],
+        "timeouts": [
+          "10.in"
+        ]
+      },
+      "feedback": "2 problem(s); first: undefined behaviour at add_loop.c:7 (signed integer overflow: 2147483647 + 1 cannot be represented in type 'int') on input '2147483647 1'; 1 input(s) timed out and were not fully checked",
+      "weight": 0.1,
+      "advice": "Free what you allocate, never use a null or freed pointer, and avoid signed overflow."
+    },
+    "readability": {
+      "score": 0.8,
+      "evidence": {
+        "model": "openai/gpt-oss-120b",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\":8,\"reasons\":[\"Clear function and variable names\",\"Helpful comment explains algorithm\",\"Consistent indentation and spacing\"]}",
+        "cache_file": "cache/llm/a17d24f0c2e6831724a9ee982f0fb70354896a3357c6e2788f61d1f94e5b2c23.json"
+      },
+      "feedback": "8/10 from openai/gpt-oss-120b: Clear function and variable names; Helpful comment explains algorithm; Consistent indentation and spacing",
+      "weight": 0.1,
+      "advice": "Use clear names, consistent indentation and a short comment above each function."
+    },
+    "originality": {
+      "score": 1.0,
+      "evidence": {
+        "max_similarity": 0.85,
+        "closest_file": "submissions/add/corpus/ai/gpt_oss_120b.c",
+        "flag_threshold": 0.85
+      },
+      "feedback": "max similarity 0.85 with submissions/add/corpus/ai/gpt_oss_120b.c: flagged for the teacher",
+      "flag": "suspected copying: similarity 0.85 with submissions/add/corpus/ai/gpt_oss_120b.c (threshold 0.85); please check by hand",
+      "weight": 0.1,
+      "advice": "Write the solution yourself and be ready to explain every line."
+    }
+  },
+  "flags": [
+    "originality: suspected copying: similarity 0.85 with submissions/add/corpus/ai/gpt_oss_120b.c (threshold 0.85); please check by hand"
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "add.c prints -2147483648 for the input 2147483647 1. The report shows the input, the expected 2147483648, what the program printed, and says to use long long.",
+        "benefit": "The student sees exactly which input breaks the program and how to fix it."
+      },
+      {
+        "use_case": "Finding copies for the teacher",
+        "example": "add_copy.c is add_good.c with every name changed. The agent still finds a similarity of 1.00 and raises a flag.",
+        "benefit": "The teacher checks only the flagged pairs instead of every submission."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short programs look copied even when they are not",
+        "example": "add.c has a similarity of 1.00 with an answer from the qwen LLM, because the obvious 5-line solution is the same for everyone.",
+        "mitigation": "A flag never lowers the grade; the teacher decides."
+      },
+      {
+        "limitation": "The readability score is the opinion of an LLM",
+        "example": "add_syntax_error.c is neatly written but got 3/10 for one missing ';', while the more cramped add.c got 6/10.",
+        "mitigation": "Readability is only 10% of the grade, and answers are cached so the score does not change between runs."
+      }
+    ]
+  }
+}

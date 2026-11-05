@@ -1,0 +1,108 @@
+{
+  "problem": "linear_search",
+  "time_limit_s": 1,
+  "memory_limit_mb": 64,
+  "sample_input": "tests/search/01.in",
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.20,
+      "advice": "Run your program on the failing inputs above, especially a match in the last position and an empty array.",
+      "params": { "testset_dir": "tests/search/" }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.10,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them.",
+      "params": { "flags": "-Wall -Wextra -Werror -std=c11" }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.10,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports.",
+      "params": { "max_cyclomatic": 8, "max_function_length": 40 }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.10,
+      "advice": "Move the search into a helper function, for example int find_first(const int *values, int n, int target), and call it from main.",
+      "params": { "expect_helpers": true, "min_functions": 2 }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.10,
+      "advice": "Test an empty array (n = 0), a single number, a match in the last position and repeated values.",
+      "params": { "inputs_dir": "tests/search/edge/", "reference": "reference/search.c",
+                  "reasons": {
+                    "n_zero": "wrong result for an empty array (n = 0); check n before reading any element",
+                    "single_found": "wrong result when the only number is the target; check the loop bounds",
+                    "single_missing": "wrong result when the only number is not the target",
+                    "last_only": "the target is the last number but was not found; the loop probably stops one step early (i < n - 1)",
+                    "all_duplicates": "every number is the target; the answer is the first index, 0",
+                    "int_limits": "wrong result with INT_MIN or INT_MAX in the array",
+                    "target_is_n": "the target equals n; the program may be mixing up n and the target",
+                    "not_found_large": "1000 numbers and no match; the answer must be -1"
+                  } }
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "weight": 0.10,
+      "advice": "Look at each number once from left to right; sorting first costs more than the search itself.",
+      "params": { "required": "O(n)", "sizes": [10000, 100000, 1000000],
+                  "input_kind": "array_not_found" }
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "weight": 0.10,
+      "advice": "Never read past the end of the array, free what you allocate, and handle n = 0.",
+      "params": { "flags": "-fsanitize=address,undefined", "inputs_dir": "tests/search/" }
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "weight": 0.10,
+      "advice": "Use clear names, consistent indentation and a short comment above each function.",
+      "params": { "model": "openai/gpt-oss-120b", "temperature": 0, "seed": 42 }
+    },
+    {
+      "name": "originality",
+      "analyzer": "similarity_flag",
+      "weight": 0.10,
+      "advice": "Write the solution yourself and be ready to explain every line.",
+      "params": { "corpus_dir": "submissions/search/", "flag_threshold": 0.85 }
+    }
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "search_off_by_one.c prints -1 when the target 8 is the last of 8 numbers. The report shows the input, the expected 7, and says the loop probably stops one step early (i < n - 1).",
+        "benefit": "The student sees the exact input that breaks the program and the likely line to fix."
+      },
+      {
+        "use_case": "Catching a correct but slow solution",
+        "example": "search_sort.c passes all 8 tests and all 8 edge cases, but it bubble sorts first and times out at n = 100000, so it gets 0 for complexity.",
+        "benefit": "Tests alone would give full marks; the timing shows the algorithm is O(n^2)."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "O(n log n) passes as O(n)",
+        "example": "A version that sorts with qsort and then does a binary search measured a growth of 0.69, the same as search_good.c, and was judged O(n). Reading the input takes most of the time.",
+        "mitigation": "The report gives the measured growth, so a teacher can read the code to check the class."
+      },
+      {
+        "limitation": "A crash at a large size looks like a slow program",
+        "example": "search_crash.c is O(n), but its recursion is a million calls deep at n = 1000000 and runs out of stack. The report says it is slower than O(n) or broken.",
+        "mitigation": "The evidence in the JSON report shows the status was a crash, not a timeout."
+      }
+    ]
+  }
+}

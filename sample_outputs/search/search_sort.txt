@@ -1,0 +1,52 @@
+===== Grading report for search_sort.c =====
+Overall grade: 87.0 / 100
+First pass: compiled, smoke run ok
+Runs that did not finish normally: timeout on 1 run(s) (complexity input
+n = 100000)
+
+Metric          Weight    Score  Contribution  Feedback
+correctness         20    20/20          20.0  8 of 8 tests pass
+syntax              10    10/10          10.0  compiles cleanly with -Wall -Wextra -Werror -std=c11
+structure           10     8/10           8.0  1 problem(s); first: main() has cyclomatic complexity 9 (limit 8)
+modularity          10    10/10          10.0  work is split into 3 functions: sort_pairs, leftmost, main
+logical             10    10/10          10.0  8 of 8 edge cases match the reference
+complexity          10     0/10           0.0  program did not finish normally at size 100000 (timeout), so it is slower than O(n) or broken
+memory_safety       10    10/10          10.0  ASan/UBSan clean on 8 input(s)
+readability         10     9/10           9.0  9/10 from openai/gpt-oss-120b: Clear function and variable names with helpful comments; Consistent indentation and spacing throughout; Functions are short and focused on a single task
+originality         10    10/10          10.0  max similarity 0.65 with submissions/search/search_good.c (not flagged)
+
+--- Where you failed ---
+Nothing: every test and edge case gave the expected answer.
+
+--- Suggestions to raise the grade ---
+- structure: Keep each function short and simple, and fix what cppcheck reports.
+- complexity: Look at each number once from left to right; sorting first costs more than the search itself.
+- readability: Use clear names, consistent indentation and a short comment above each function.
+
+--- Usefulness & limitations of this evaluation ---
+Useful for:
+  1. Explaining a wrong answer to the student
+     Example: search_off_by_one.c prints -1 when the target 8 is the
+     last of 8 numbers. The report shows the input, the expected 7, and
+     says the loop probably stops one step early (i < n - 1).
+     Benefit: The student sees the exact input that breaks the program
+     and the likely line to fix.
+  2. Catching a correct but slow solution
+     Example: search_sort.c passes all 8 tests and all 8 edge cases, but
+     it bubble sorts first and times out at n = 100000, so it gets 0 for
+     complexity.
+     Benefit: Tests alone would give full marks; the timing shows the
+     algorithm is O(n^2).
+Limits of this report:
+  1. O(n log n) passes as O(n)
+     Example: A version that sorts with qsort and then does a binary
+     search measured a growth of 0.69, the same as search_good.c, and
+     was judged O(n). Reading the input takes most of the time.
+     Fix: The report gives the measured growth, so a teacher can read
+     the code to check the class.
+  2. A crash at a large size looks like a slow program
+     Example: search_crash.c is O(n), but its recursion is a million
+     calls deep at n = 1000000 and runs out of stack. The report says it
+     is slower than O(n) or broken.
+     Fix: The evidence in the JSON report shows the status was a crash,
+     not a timeout.

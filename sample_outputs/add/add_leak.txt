@@ -1,0 +1,48 @@
+===== Grading report for add_leak.c =====
+Overall grade: 86.5 / 100
+First pass: compiled, smoke run ok
+
+Metric          Weight    Score  Contribution  Feedback
+correctness         20    20/20          20.0  10 of 10 tests pass
+syntax              10    10/10          10.0  compiles cleanly with -Wall -Wextra -Werror -std=c11
+structure           10     6/10           6.0  2 problem(s); first: cppcheck line 13: Memory leak: numbers [memleak]
+modularity          10     5/10           5.0  only main() is defined; move a piece of the work into a helper function and call it from main
+logical             10    10/10          10.0  20 of 20 edge cases match the reference
+complexity          10    10/10          10.0  O(1) confirmed (required O(1))
+memory_safety       10   7.5/10           7.5  1 problem(s); first: memory leak at add_leak.c:8 in main() (Direct leak of 16 byte(s) in 1 object(s)) on input '7 5'
+readability         10     8/10           8.0  8/10 from openai/gpt-oss-120b: Clear naming but could be more descriptive; Helpful comment about memory management; Consistent indentation and spacing
+originality         10    10/10          10.0  max similarity 0.45 with submissions/add/corpus/ai/gpt_oss_120b.c (not flagged)
+
+--- Where you failed ---
+Nothing: every test and edge case gave the expected answer.
+
+--- Suggestions to raise the grade ---
+- structure: Keep each function short and simple, and fix what cppcheck reports.
+- modularity: Move the real work into a helper function, for example int add(int a, int b), and call it from main.
+- memory_safety: Free what you allocate, never use a null or freed pointer, and avoid signed overflow.
+- readability: Use clear names, consistent indentation and a short comment above each function.
+
+--- Usefulness & limitations of this evaluation ---
+Useful for:
+  1. Explaining a wrong answer to the student
+     Example: add.c prints -2147483648 for the input 2147483647 1. The
+     report shows the input, the expected 2147483648, what the program
+     printed, and says to use long long.
+     Benefit: The student sees exactly which input breaks the program
+     and how to fix it.
+  2. Finding copies for the teacher
+     Example: add_copy.c is add_good.c with every name changed. The
+     agent still finds a similarity of 1.00 and raises a flag.
+     Benefit: The teacher checks only the flagged pairs instead of every
+     submission.
+Limits of this report:
+  1. Short programs look copied even when they are not
+     Example: add.c has a similarity of 1.00 with an answer from the
+     qwen LLM, because the obvious 5-line solution is the same for
+     everyone.
+     Fix: A flag never lowers the grade; the teacher decides.
+  2. The readability score is the opinion of an LLM
+     Example: add_syntax_error.c is neatly written but got 3/10 for one
+     missing ';', while the more cramped add.c got 6/10.
+     Fix: Readability is only 10% of the grade, and answers are cached
+     so the score does not change between runs.

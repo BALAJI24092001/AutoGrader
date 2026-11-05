@@ -2,4 +2,4 @@
 # Pinned so the same submission gets the same structure score on every machine.
 lizard==1.24.2
 # Only for the dashboard (streamlit run streamlit_app.py); grading does not need it.
-streamlit==1.66.1
+streamlit==1.66.1

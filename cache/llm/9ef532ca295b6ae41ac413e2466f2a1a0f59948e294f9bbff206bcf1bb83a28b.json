@@ -1,0 +1,1 @@
+{"score":5,"reasons":["Variable names are short and non‑descriptive (n, t, a)","No comments explaining purpose or logic","Missing braces on single‑line for loop reduces clarity"]}

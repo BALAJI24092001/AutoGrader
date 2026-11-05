@@ -1,0 +1,89 @@
+===== Grading report for add_loop.c =====
+Overall grade: 73.5 / 100
+First pass: compiled, smoke run ok
+Runs that did not finish normally: timeout on 3 run(s) (test 10, edge
+case int_overflow, edge case int_overflow)
+
+Metric          Weight    Score  Contribution  Feedback
+correctness         20    14/20          14.0  7 of 10 tests pass; first failure 07: input '2147483647 1', expected '2147483648', got '-2147483648' (ok)
+syntax              10    10/10          10.0  compiles cleanly with -Wall -Wextra -Werror -std=c11
+structure           10    10/10          10.0  all functions within limits (cyclomatic <= 8, length <= 40); cppcheck found nothing
+modularity          10    10/10          10.0  work is split into 2 functions: add, main
+logical             10   6.5/10           6.5  13 of 20 edge cases match the reference; int_overflow: input '2147483647 1', expected '2147483648', got '-2147483648' (ok): sum goes beyond int range; use long long (and %lld) for the numbers and the sum
+complexity          10     0/10           0.0  estimated O(n), required O(1): time went from 0.007s at n=1000000 to 0.219s at n=100000000
+memory_safety       10     5/10           5.0  2 problem(s); first: undefined behaviour at add_loop.c:7 (signed integer overflow: 2147483647 + 1 cannot be represented in type 'int') on input '2147483647 1'; 1 input(s) timed out and were not fully checked
+readability         10     8/10           8.0  8/10 from openai/gpt-oss-120b: Clear function and variable names; Helpful comment explains algorithm; Consistent indentation and spacing
+originality         10    10/10          10.0  max similarity 0.85 with submissions/add/corpus/ai/gpt_oss_120b.c: flagged for the teacher
+
+--- Flags for the teacher (they do not change the grade) ---
+- originality: suspected copying: similarity 0.85 with submissions/add/corpus/ai/gpt_oss_120b.c (threshold 0.85); please check by hand
+
+--- Where you failed ---
+Test 07
+   INPUT:    2147483647 1
+   EXPECTED: 2147483648
+   GOT:      -2147483648
+   WHY:      sum goes beyond int range; use long long (and %lld) for the
+             numbers and the sum
+Test 08
+   INPUT:    -2147483648 -1
+   EXPECTED: -2147483649
+   GOT:      2147483647
+   WHY:      sum goes beyond int range; use long long (and %lld) for the
+             numbers and the sum
+Test 10
+   INPUT:    -2147483648 2147483647
+   EXPECTED: -1
+   GOT:      (nothing)
+   WHY:      the program did not finish within the time limit
+Edge case (int_overflow)
+   INPUT:    2147483647 2147483647
+   EXPECTED: 4294967294
+   GOT:      (nothing)
+   WHY:      the program did not finish normally (timeout), so it gave
+             no answer
+Edge case (int_overflow)
+   INPUT:    -2147483648 -2147483648
+   EXPECTED: -4294967296
+   GOT:      (nothing)
+   WHY:      the program did not finish normally (timeout), so it gave
+             no answer
+Edge case (int_overflow)
+   INPUT:    2147482751 1589
+   EXPECTED: 2147484340
+   GOT:      -2147482956
+   WHY:      sum goes beyond int range; use long long (and %lld) for the
+             numbers and the sum
+... and 2 more failing edge cases
+
+--- Suggestions to raise the grade ---
+- correctness: Run your program on the failing inputs above, including very large and very small numbers.
+- logical: Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum.
+- complexity: Compute the sum directly with a + b instead of a loop that grows with the numbers.
+- memory_safety: Free what you allocate, never use a null or freed pointer, and avoid signed overflow.
+- readability: Use clear names, consistent indentation and a short comment above each function.
+
+--- Usefulness & limitations of this evaluation ---
+Useful for:
+  1. Explaining a wrong answer to the student
+     Example: add.c prints -2147483648 for the input 2147483647 1. The
+     report shows the input, the expected 2147483648, what the program
+     printed, and says to use long long.
+     Benefit: The student sees exactly which input breaks the program
+     and how to fix it.
+  2. Finding copies for the teacher
+     Example: add_copy.c is add_good.c with every name changed. The
+     agent still finds a similarity of 1.00 and raises a flag.
+     Benefit: The teacher checks only the flagged pairs instead of every
+     submission.
+Limits of this report:
+  1. Short programs look copied even when they are not
+     Example: add.c has a similarity of 1.00 with an answer from the
+     qwen LLM, because the obvious 5-line solution is the same for
+     everyone.
+     Fix: A flag never lowers the grade; the teacher decides.
+  2. The readability score is the opinion of an LLM
+     Example: add_syntax_error.c is neatly written but got 3/10 for one
+     missing ';', while the more cramped add.c got 6/10.
+     Fix: Readability is only 10% of the grade, and answers are cached
+     so the score does not change between runs.

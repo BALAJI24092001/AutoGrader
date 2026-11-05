@@ -1,0 +1,99 @@
+{
+  "problem": "add_two_integers",
+  "time_limit_s": 1,
+  "memory_limit_mb": 64,
+  "sample_input": "tests/add/01.in",
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.20,
+      "advice": "Run your program on the failing inputs above, including very large and very small numbers.",
+      "params": { "testset_dir": "tests/add/" }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.10,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them.",
+      "params": { "flags": "-Wall -Wextra -Werror -std=c11" }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.10,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports.",
+      "params": { "max_cyclomatic": 8, "max_function_length": 40 }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.10,
+      "advice": "Move the real work into a helper function, for example int add(int a, int b), and call it from main.",
+      "params": { "expect_helpers": true, "min_functions": 2 }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.10,
+      "advice": "Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum.",
+      "params": { "cases": ["negatives", "zero", "int_overflow"],
+                  "reference": "reference/add.c", "random_per_case": 3, "seed": 42 }
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "weight": 0.10,
+      "advice": "Compute the sum directly with a + b instead of a loop that grows with the numbers.",
+      "params": { "required": "O(1)", "sizes": [1000000, 10000000, 100000000],
+                  "input": "{n} {n}" }
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "weight": 0.10,
+      "advice": "Free what you allocate, never use a null or freed pointer, and avoid signed overflow.",
+      "params": { "flags": "-fsanitize=address,undefined", "inputs_dir": "tests/add/" }
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "weight": 0.10,
+      "advice": "Use clear names, consistent indentation and a short comment above each function.",
+      "params": { "model": "openai/gpt-oss-120b", "temperature": 0, "seed": 42 }
+    },
+    {
+      "name": "originality",
+      "analyzer": "similarity_flag",
+      "weight": 0.10,
+      "advice": "Write the solution yourself and be ready to explain every line.",
+      "params": { "corpus_dir": "submissions/add/", "flag_threshold": 0.85 }
+    }
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "add.c prints -2147483648 for the input 2147483647 1. The report shows the input, the expected 2147483648, what the program printed, and says to use long long.",
+        "benefit": "The student sees exactly which input breaks the program and how to fix it."
+      },
+      {
+        "use_case": "Finding copies for the teacher",
+        "example": "add_copy.c is add_good.c with every name changed. The agent still finds a similarity of 1.00 and raises a flag.",
+        "benefit": "The teacher checks only the flagged pairs instead of every submission."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short programs look copied even when they are not",
+        "example": "add.c has a similarity of 1.00 with an answer from the qwen LLM, because the obvious 5-line solution is the same for everyone.",
+        "mitigation": "A flag never lowers the grade; the teacher decides."
+      },
+      {
+        "limitation": "The readability score is the opinion of an LLM",
+        "example": "add_syntax_error.c is neatly written but got 3/10 for one missing ';', while the more cramped add.c got 6/10.",
+        "mitigation": "Readability is only 10% of the grade, and answers are cached so the score does not change between runs."
+      }
+    ]
+  }
+}

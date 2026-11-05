@@ -1,0 +1,171 @@
+{
+  "submission": "submissions/add/add_syntax_error.c",
+  "grade": 26.0,
+  "rules_sha256": "b993f21f617bb6825b4523d28fd8f9f4c7c583d108c0b6a9484c701f83810654",
+  "tool_versions": {
+    "python": "3.14.4",
+    "gcc": "gcc (Ubuntu 15.2.0-16ubuntu1) 15.2.0",
+    "cppcheck": "Cppcheck 2.19.0",
+    "lizard": "1.24.2"
+  },
+  "first_pass": {
+    "source": "submissions/add/add_syntax_error.c",
+    "checks": {
+      "has_main": true,
+      "uses_scanf": true,
+      "uses_printf": true,
+      "has_return": true
+    },
+    "compiled": false,
+    "compiler_output": "submissions/add/add_syntax_error.c: In function \u2018main\u2019:\nsubmissions/add/add_syntax_error.c:6:27: error: expected \u2018;\u2019 before \u2018printf\u2019\n    6 |     scanf(\"%d %d\", &a, &b)\n      |                           ^\n      |                           ;\n    7 |     printf(\"%d\\n\", a + b);\n      |     ~~~~~~                 \n",
+    "binary": null,
+    "smoke": null,
+    "suspected_infinite_loop": false,
+    "can_run": false
+  },
+  "run_problems": [],
+  "metrics": {
+    "correctness": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "does not compile"
+      },
+      "feedback": "not run: does not compile",
+      "weight": 0.2,
+      "advice": "Run your program on the failing inputs above, including very large and very small numbers."
+    },
+    "syntax": {
+      "score": 0.0,
+      "evidence": {
+        "flags": "-Wall -Wextra -Werror -std=c11",
+        "warnings": [],
+        "errors": [
+          "submissions/add/add_syntax_error.c:6:27: error: expected \u2018;\u2019 before \u2018printf\u2019"
+        ]
+      },
+      "feedback": "does not compile with -Wall -Wextra -Werror -std=c11: submissions/add/add_syntax_error.c:6:27: error: expected \u2018;\u2019 before \u2018printf\u2019",
+      "weight": 0.1,
+      "advice": "Fix every compiler warning; compile with -Wall -Wextra to see them."
+    },
+    "structure": {
+      "score": 0.8,
+      "evidence": {
+        "functions": [
+          {
+            "name": "main",
+            "line": 3,
+            "cyclomatic": 1,
+            "length": 7
+          }
+        ],
+        "cppcheck": [
+          {
+            "line": 6,
+            "severity": "error",
+            "id": "unknownMacro",
+            "message": "There is an unknown macro here somewhere. Configuration is required. If scanf is a macro then please configure it."
+          }
+        ],
+        "problems": [
+          "cppcheck line 6: There is an unknown macro here somewhere. Configuration is required. If scanf is a macro then please configure it. [unknownMacro]"
+        ]
+      },
+      "feedback": "1 problem(s); first: cppcheck line 6: There is an unknown macro here somewhere. Configuration is required. If scanf is a macro then please configure it. [unknownMacro]",
+      "weight": 0.1,
+      "advice": "Keep each function short and simple, and fix what cppcheck reports."
+    },
+    "modularity": {
+      "score": 0.5,
+      "evidence": {
+        "functions_defined": [
+          "main"
+        ],
+        "helpers_used": [],
+        "helpers_unused": [],
+        "counted": 1,
+        "expected_min": 2
+      },
+      "feedback": "only main() is defined; move a piece of the work into a helper function and call it from main",
+      "weight": 0.1,
+      "advice": "Move the real work into a helper function, for example int add(int a, int b), and call it from main."
+    },
+    "logical": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "does not compile"
+      },
+      "feedback": "not run: does not compile",
+      "weight": 0.1,
+      "advice": "Test negatives, zero and sums beyond the int range; use long long (and %lld) for the sum."
+    },
+    "complexity": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "does not compile"
+      },
+      "feedback": "not run: does not compile",
+      "weight": 0.1,
+      "advice": "Compute the sum directly with a + b instead of a loop that grows with the numbers."
+    },
+    "memory_safety": {
+      "score": 0.0,
+      "evidence": {
+        "skipped": "does not compile"
+      },
+      "feedback": "not run: does not compile",
+      "weight": 0.1,
+      "advice": "Free what you allocate, never use a null or freed pointer, and avoid signed overflow."
+    },
+    "readability": {
+      "score": 0.3,
+      "evidence": {
+        "model": "openai/gpt-oss-120b",
+        "temperature": 0,
+        "seed": 42,
+        "raw_response": "{\"score\":3,\"reasons\":[\"Unclear variable names (a, b)\",\"No comments explaining purpose\",\"Missing semicolon after scanf reduces readability\"]}",
+        "cache_file": "cache/llm/e941fa3a8d3f435e86890341384e613e84a94cb1fa8e90d95a3ab23f5aa0f3f9.json"
+      },
+      "feedback": "3/10 from openai/gpt-oss-120b: Unclear variable names (a, b); No comments explaining purpose; Missing semicolon after scanf reduces readability",
+      "weight": 0.1,
+      "advice": "Use clear names, consistent indentation and a short comment above each function."
+    },
+    "originality": {
+      "score": 1.0,
+      "evidence": {
+        "max_similarity": 0.76,
+        "closest_file": "submissions/add/add.c",
+        "flag_threshold": 0.85
+      },
+      "feedback": "max similarity 0.76 with submissions/add/add.c (not flagged)",
+      "weight": 0.1,
+      "advice": "Write the solution yourself and be ready to explain every line."
+    }
+  },
+  "flags": [],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Explaining a wrong answer to the student",
+        "example": "add.c prints -2147483648 for the input 2147483647 1. The report shows the input, the expected 2147483648, what the program printed, and says to use long long.",
+        "benefit": "The student sees exactly which input breaks the program and how to fix it."
+      },
+      {
+        "use_case": "Finding copies for the teacher",
+        "example": "add_copy.c is add_good.c with every name changed. The agent still finds a similarity of 1.00 and raises a flag.",
+        "benefit": "The teacher checks only the flagged pairs instead of every submission."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Short programs look copied even when they are not",
+        "example": "add.c has a similarity of 1.00 with an answer from the qwen LLM, because the obvious 5-line solution is the same for everyone.",
+        "mitigation": "A flag never lowers the grade; the teacher decides."
+      },
+      {
+        "limitation": "The readability score is the opinion of an LLM",
+        "example": "add_syntax_error.c is neatly written but got 3/10 for one missing ';', while the more cramped add.c got 6/10.",
+        "mitigation": "Readability is only 10% of the grade, and answers are cached so the score does not change between runs."
+      }
+    ]
+  }
+}

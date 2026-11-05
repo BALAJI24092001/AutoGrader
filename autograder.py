@@ -19,10 +19,10 @@ import subprocess
 import sys
 
 import lizard
+
 from analyzers import NEEDS_BINARY, REGISTRY
 from first_pass import run_first_pass
 from report_text import first_pass_status, full_report, run_problems, run_problems_text
-
 from rules import load_rules
 
 
@@ -30,46 +30,28 @@ def tool_versions():
     """Versions go into the report, so a grade can be reproduced with the same tools."""
     gcc = subprocess.run(["gcc", "--version"], capture_output=True, text=True)
     cppcheck = subprocess.run(["cppcheck", "--version"], capture_output=True, text=True)
-    return {
-        "python": platform.python_version(),
-        "gcc": gcc.stdout.splitlines()[0],
-        "cppcheck": cppcheck.stdout.strip(),
-        "lizard": lizard.version,
-    }
+    return {"python": platform.python_version(), "gcc": gcc.stdout.splitlines()[0],
+            "cppcheck": cppcheck.stdout.strip(), "lizard": lizard.version}
 
 
 def run_metric(metric, source_path, first_pass, rules):
     """Run one metric's analyzer. Always returns a result, even if the analyzer fails."""
     analyzer = metric["analyzer"]
     if analyzer not in REGISTRY:
-        return {
-            "score": 0.0,
-            "evidence": {},
-            "feedback": "not implemented yet",
-            "implemented": False,
-        }
+        return {"score": 0.0, "evidence": {}, "feedback": "not implemented yet",
+                "implemented": False}
 
     if analyzer in NEEDS_BINARY and not first_pass["can_run"]:
-        reason = (
-            "suspected infinite loop (smoke run timed out)"
-            if first_pass["suspected_infinite_loop"]
-            else "does not compile"
-        )
-        return {
-            "score": 0.0,
-            "evidence": {"skipped": reason},
-            "feedback": f"not run: {reason}",
-        }
+        reason = ("suspected infinite loop (smoke run timed out)"
+                  if first_pass["suspected_infinite_loop"] else "does not compile")
+        return {"score": 0.0, "evidence": {"skipped": reason}, "feedback": f"not run: {reason}"}
 
     try:
         result = REGISTRY[analyzer](source_path, first_pass, metric["params"], rules)
     except Exception as error:
         # A bug in one analyzer should not stop the whole grading run.
-        return {
-            "score": 0.0,
-            "evidence": {"error": repr(error)},
-            "feedback": f"analyzer failed: {error}",
-        }
+        return {"score": 0.0, "evidence": {"error": repr(error)},
+                "feedback": f"analyzer failed: {error}"}
     result["score"] = round(result["score"], 4)
     return result
 
@@ -105,32 +87,21 @@ def grade_submission(source_path, rules, versions):
 
 def summary_text(report):
     """The short summary printed while grading (the full report is saved as a .txt file)."""
-    lines = [
-        f"== {os.path.basename(report['submission'])}",
-        f"   first pass: {first_pass_status(report['first_pass'])}",
-    ]
+    lines = [f"== {os.path.basename(report['submission'])}",
+             f"   first pass: {first_pass_status(report['first_pass'])}"]
     if report["run_problems"]:
         lines.append(f"   RUN PROBLEMS: {run_problems_text(report['run_problems'])}")
     missing = 0
     for name, result in report["metrics"].items():
         if result.get("implemented") is False:
             missing += 1
-            lines.append(
-                f"   {name:14} ----  x {result['weight']:.2f}  not implemented yet"
-            )
+            lines.append(f"   {name:14} ----  x {result['weight']:.2f}  not implemented yet")
         else:
-            lines.append(
-                f"   {name:14} {result['score']:.2f} x {result['weight']:.2f}  {
-                    result['feedback']
-                }"
-            )
+            lines.append(f"   {name:14} {result['score']:.2f} x {result['weight']:.2f}  {result['feedback']}")
     line = f"   grade {report['grade']:.1f} / 100"
     if missing:
-        possible = 100 * sum(
-            r["weight"]
-            for r in report["metrics"].values()
-            if r.get("implemented") is not False
-        )
+        possible = 100 * sum(r["weight"] for r in report["metrics"].values()
+                             if r.get("implemented") is not False)
         line += f"  ({missing} metrics not implemented yet, max possible now {possible:.0f})"
     lines.append(line)
     for flag in report["flags"]:
