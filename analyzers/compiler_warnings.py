@@ -26,8 +26,12 @@ def analyze(source_path, first_pass, params, rules):
     os.makedirs(rules["build_dir"], exist_ok=True)
     name = os.path.splitext(os.path.basename(source_path))[0]
     obj = os.path.join(rules["build_dir"], name + ".syntax.o")
-    result = subprocess.run(["gcc", *flags, "-c", source_path, "-o", obj],
-                            capture_output=True, text=True, timeout=COMPILE_TIMEOUT_S)
+    result = subprocess.run(
+        ["gcc", *flags, "-c", source_path, "-o", obj],
+        capture_output=True,
+        text=True,
+        timeout=COMPILE_TIMEOUT_S,
+    )
 
     warnings, errors = [], []
     for line in result.stderr.splitlines():
@@ -41,7 +45,9 @@ def analyze(source_path, first_pass, params, rules):
         feedback = f"does not compile with {params['flags']}: {errors[0]}"
     elif warnings:
         score = max(0.0, 1 - penalty * len(warnings))
-        feedback = f"{len(warnings)} warning(s) with {params['flags']}; first: {warnings[0]}"
+        feedback = (
+            f"{len(warnings)} warning(s) with {params['flags']}; first: {warnings[0]}"
+        )
     else:
         score = 1.0
         feedback = f"compiles cleanly with {params['flags']}"

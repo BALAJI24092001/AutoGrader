@@ -39,8 +39,12 @@ def strip_comments(code):
     A block comment is replaced by the newlines it contained, so every line
     of code keeps its line number (function_split relies on this).
     """
-    code = re.sub(r"/\*.*?\*/", lambda m: " " + "\n" * m.group().count("\n"),
-                  code, flags=re.DOTALL)
+    code = re.sub(
+        r"/\*.*?\*/",
+        lambda m: " " + "\n" * m.group().count("\n"),
+        code,
+        flags=re.DOTALL,
+    )
     return re.sub(r"//[^\n]*", " ", code)
 
 
@@ -52,7 +56,9 @@ def compile_plain(source_path, build_dir):
     # -lm links the maths library, so a student who uses sqrt() still compiles.
     result = subprocess.run(
         ["gcc", source_path, "-o", binary, "-lm"],
-        capture_output=True, text=True, timeout=COMPILE_TIMEOUT_S,
+        capture_output=True,
+        text=True,
+        timeout=COMPILE_TIMEOUT_S,
     )
     if result.returncode != 0:
         return None, result.stderr
@@ -96,11 +102,15 @@ if __name__ == "__main__":
         missing = [name for name, found in fp["checks"].items() if not found]
         smoke = fp["smoke"]["status"] if fp["smoke"] else "-"
         output = fp["smoke"]["stdout"].strip() if fp["smoke"] else ""
-        print(f"{os.path.basename(source):22} compiled={fp['compiled']!s:5} "
-              f"smoke={smoke:8} output={output!r:6} "
-              f"infinite_loop={fp['suspected_infinite_loop']!s:5} can_run={fp['can_run']!s:5} "
-              f"missing={missing}")
+        print(
+            f"{os.path.basename(source):22} compiled={fp['compiled']!s:5} "
+            f"smoke={smoke:8} output={output!r:6} "
+            f"infinite_loop={fp['suspected_infinite_loop']!s:5} can_run={fp['can_run']!s:5} "
+            f"missing={missing}"
+        )
         if not fp["compiled"]:
-            first_error = next((l for l in fp["compiler_output"].splitlines() if "error:" in l),
-                               fp["compiler_output"].strip())
+            first_error = next(
+                (l for l in fp["compiler_output"].splitlines() if "error:" in l),
+                fp["compiler_output"].strip(),
+            )
             print(f"{'':22} compile error: {first_error}")

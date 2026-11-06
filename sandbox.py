@@ -31,6 +31,7 @@ MAX_OUTPUT_BYTES = 1_000_000  # 1 MB is far more than any correct answer needs
 
 def _set_limits(time_limit_s, memory_limit_mb):
     """Return a function that the child process runs just before the program starts."""
+
     def apply():
         cpu = math.ceil(time_limit_s) + 1
         resource.setrlimit(resource.RLIMIT_CPU, (cpu, cpu))
@@ -39,6 +40,7 @@ def _set_limits(time_limit_s, memory_limit_mb):
         if memory_limit_mb is not None:
             limit = memory_limit_mb * 1024 * 1024
             resource.setrlimit(resource.RLIMIT_AS, (limit, limit))
+
     return apply
 
 
@@ -49,9 +51,9 @@ def _status(timed_out, returncode):
     if returncode == -signal.SIGXFSZ:
         return "output_limit"
     if returncode < 0:
-        return "crash"          # killed by a signal, e.g. SIGSEGV or SIGABRT
+        return "crash"  # killed by a signal, e.g. SIGSEGV or SIGABRT
     if returncode > 0:
-        return "error_exit"     # program ended normally but returned non-zero
+        return "error_exit"  # program ended normally but returned non-zero
     return "ok"
 
 
@@ -72,10 +74,12 @@ def run(command, input_text, time_limit_s, memory_limit_mb):
     # relative name (e.g. fopen("out.txt", "w")) land there and are deleted
     # afterwards. The path to the program must then be absolute.
     command = [os.path.abspath(command[0]), *command[1:]]
-    with tempfile.TemporaryDirectory() as work_dir, \
-         tempfile.TemporaryFile() as stdin_file, \
-         tempfile.TemporaryFile() as stdout_file, \
-         tempfile.TemporaryFile() as stderr_file:
+    with (
+        tempfile.TemporaryDirectory() as work_dir,
+        tempfile.TemporaryFile() as stdin_file,
+        tempfile.TemporaryFile() as stdout_file,
+        tempfile.TemporaryFile() as stderr_file,
+    ):
         stdin_file.write(input_text.encode())
         stdin_file.seek(0)
 

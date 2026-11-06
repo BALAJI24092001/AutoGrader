@@ -32,7 +32,12 @@ import sandbox
 RUNS = 5
 
 # (class name, growth must be below this), from fastest to slowest.
-CLASSES = [("O(1)", 0.3), ("O(n)", 1.5), ("O(n^2)", 2.5), ("worse than O(n^2)", math.inf)]
+CLASSES = [
+    ("O(1)", 0.3),
+    ("O(n)", 1.5),
+    ("O(n^2)", 2.5),
+    ("worse than O(n^2)", math.inf),
+]
 ORDER = [name for name, _ in CLASSES]
 
 
@@ -46,7 +51,11 @@ INPUT_KINDS = {"array_not_found": array_not_found}
 def make_input(params, n):
     if "input_kind" in params:
         if params["input_kind"] not in INPUT_KINDS:
-            raise ValueError(f"unknown input_kind {params['input_kind']!r}, use one of {list(INPUT_KINDS)}")
+            raise ValueError(
+                f"unknown input_kind {params['input_kind']!r}, use one of {
+                    list(INPUT_KINDS)
+                }"
+            )
         return INPUT_KINDS[params["input_kind"]](n)
     return params["input"].format(n=n) + "\n"
 
@@ -67,15 +76,27 @@ def analyze(source_path, first_pass, params, rules):
         test_input = make_input(params, n)
         times = []
         for _ in range(RUNS):
-            result = sandbox.run([first_pass["binary"]], test_input,
-                                 rules["time_limit_s"], rules["memory_limit_mb"])
+            result = sandbox.run(
+                [first_pass["binary"]],
+                test_input,
+                rules["time_limit_s"],
+                rules["memory_limit_mb"],
+            )
             if result["status"] != "ok":
                 return {
                     "score": 0.0,
-                    "evidence": {"required": required, "timings": timings,
-                                 "failed_at": n, "status": result["status"]},
-                    "feedback": (f"program did not finish normally at size {n} "
-                                 f"({result['status']}), so it is slower than {required} or broken"),
+                    "evidence": {
+                        "required": required,
+                        "timings": timings,
+                        "failed_at": n,
+                        "status": result["status"],
+                    },
+                    "feedback": (
+                        f"program did not finish normally at size {n} "
+                        f"({result['status']}), so it is slower than {
+                            required
+                        } or broken"
+                    ),
                 }
             times.append(result["time_s"])
         timings.append({"n": n, "median_s": statistics.median(times)})
@@ -90,11 +111,19 @@ def analyze(source_path, first_pass, params, rules):
     if ok:
         feedback = f"{estimated} confirmed (required {required})"
     else:
-        feedback = (f"estimated {estimated}, required {required}: time went from "
-                    f"{first['median_s']}s at n={first['n']} to {last['median_s']}s at n={last['n']}")
+        feedback = (
+            f"estimated {estimated}, required {required}: time went from "
+            f"{first['median_s']}s at n={first['n']} to {last['median_s']}s at n={
+                last['n']
+            }"
+        )
     return {
         "score": 1.0 if ok else 0.0,
-        "evidence": {"required": required, "estimated": estimated,
-                     "growth": round(growth, 2), "timings": timings},
+        "evidence": {
+            "required": required,
+            "estimated": estimated,
+            "growth": round(growth, 2),
+            "timings": timings,
+        },
         "feedback": feedback,
     }

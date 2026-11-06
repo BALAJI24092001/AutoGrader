@@ -5,6 +5,7 @@
 int main(void)
 {
     int a, b;
+    // int c; // unused variable
     int *result = NULL;
     scanf("%d %d", &a, &b);
     *result = a + b;

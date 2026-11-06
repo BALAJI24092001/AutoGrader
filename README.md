@@ -273,3 +273,5 @@ with "Missing semicolon after scanf reduces readability" as one of the
 reasons. The more cramped `submissions/add/add.c` got 6/10. The missing `;`
 is already counted by the syntax metric (0), so one character costs points
 twice.
+
+export GROQ_API_KEY="gsk_YGFwIIGK0TKRjY4wBdeFWGdyb3FYu8aO1Vc7NKUbZozYSgGQKuJ"
